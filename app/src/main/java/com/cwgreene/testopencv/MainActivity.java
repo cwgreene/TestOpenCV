@@ -16,8 +16,12 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     public static final String TAG = "DOOM";
     // Used to load the 'native-lib' library on application startup.
     static {
+        Log.i(TAG, "Beginning initialization of OpenCV");
         if (!OpenCVLoader.initDebug()) {
+            Log.e(TAG, "Oh noes! This did not work. Sad!");
             // Handle initialization error
+        } else {
+            Log.i(TAG, "Prepped and Ready!");
         }
 
         System.loadLibrary("native-lib");
@@ -32,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.HelloOpenCvView);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
+        mOpenCvCameraView.enableView();
     }
     @Override
     public void onPause()
@@ -46,8 +51,10 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             mOpenCvCameraView.disableView();
     }
     public void onCameraViewStarted(int width, int height) {
+        Log.i(TAG, "onCameraViewStarted!");
     }
     public void onCameraViewStopped() {
+        Log.i(TAG, "onCameraViewStopped!");
     }
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         return inputFrame.rgba();
