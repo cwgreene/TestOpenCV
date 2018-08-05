@@ -9,7 +9,12 @@ import android.widget.TextView;
 
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.OpenCVLoader;
+import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfKeyPoint;
+import org.opencv.core.Scalar;
+import org.opencv.features2d.Features2d;
+import org.opencv.features2d.ORB;
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -57,7 +62,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         Log.i(TAG, "onCameraViewStopped!");
     }
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-        return inputFrame.rgba();
+        Mat m = inputFrame.rgba();
+        double[] x = {255,0,0,0};
+        m.put(10, 10, x);
+        ORB orb = ORB.create();
+        MatOfKeyPoint mkp = new MatOfKeyPoint();
+        orb.detect(m, mkp);
+        Features2d.drawKeypoints(m, mkp, m, new Scalar(255,0,0,0), Features2d.DRAW_OVER_OUTIMG);
+        return m;
     }
 
     /**
